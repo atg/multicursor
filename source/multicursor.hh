@@ -27,7 +27,6 @@ public:
     int64_t focused_range_index; // is -1 if there is no currently focused range
     int64_t document_length;
     
-    
     context(std::vector<range> _ranges) : ranges(_ranges) { };
     
     // A "coherent" context has only 1 range (or is focused on a particular range)
@@ -35,16 +34,26 @@ public:
     
     // Does |ranges| break any laws. All ranges must be contained within [0, document_length), and must not overlap. 0-length ranges must not 'coincide' with other ranges.
     bool isValid();
-
-
+    
+    // Returns an invalid range if there is no range at |index|
+    range rangeAtIndex(int64_t index);
+    int64_t indexForRange(range rng);
+    
+    // Returns the range at index 0, or the focused range if we are focused
+    range primaryRange();
+    
+    
 // Atomic operations
 // Guaranteed not to leave the context in an invalid state.
     bool addRange(int64_t rng);
     bool deleteRange(range rng);
-    bool deleteRanges(std
+    bool deleteRanges(std::vector<range> rngs);
     
     bool focus(range rng);
     bool unfocus();
+    
+    // Perform an action on multiple ranges
+    bool performAction(range (^callback)(range rng, bool* shouldDelete));
 };
 
 }
