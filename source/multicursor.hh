@@ -17,6 +17,9 @@ struct range {
     bool isDegenerate(); // Is the length 0?
     
     range truncateToFitLength(int64_t documentLength); // truncate this range so that it fits in documentLength. First try to make the length smaller, then try to make the location smaller and the length 0.
+    
+    range unionIndexes(range rng);
+    bool indexesIntersect(range rng);
 };
 
 class context {
