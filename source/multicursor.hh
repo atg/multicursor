@@ -8,6 +8,8 @@ struct range {
     int64_t location;
     int64_t length;
     
+    range(int64_t loc, int64_t len) : location(loc), length(len) { }
+    
     bool isValid(); // Are location and length both non-negative?
     bool hasIndex(int64_t); // Does it contain this index?
     
@@ -18,7 +20,6 @@ struct range {
     
     range truncateToFitLength(int64_t documentLength); // truncate this range so that it fits in documentLength. First try to make the length smaller, then try to make the location smaller and the length 0.
     
-    range unionIndexes(range rng);
     bool indexesIntersect(range rng);
 };
 
