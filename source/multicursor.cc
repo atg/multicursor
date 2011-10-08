@@ -57,3 +57,47 @@ bool range::indexesIntersect(range rng) {
 		return false;
 	return rng.hasIndex(lastIndex()) || rng.hasIndex(location);
 }
+
+//
+// context
+//
+bool context::isCoherent() {
+  
+}
+
+bool context::isValid() {
+  
+}
+
+range context::rangeAtIndex(int64_t index) {
+  if (index )
+}
+
+int64_t context::indexForRange(range rng) {
+  
+}
+
+range context::primaryRange() {
+  return (focused_range_index) < 0 ? ranges[0] : ranges[focused_range_index];
+}
+
+bool context::addRange(int64_t rng) {
+
+}
+bool context::deleteRange(range rng) {
+  
+}
+bool context::deleteRanges(std::vector<range> rngs) {
+  
+}
+
+bool context::focus(range rng) {
+  
+}
+bool context::unfocus() {
+  focused_range_index = -1;
+}
+
+bool context::performAction(range (^callback)(range rng, bool* shouldDelete)) {
+  
+}

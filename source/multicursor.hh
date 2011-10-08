@@ -60,4 +60,4 @@ public:
     bool performAction(range (^callback)(range rng, bool* shouldDelete));
 };
 
-}
+} //namespace multicursor
