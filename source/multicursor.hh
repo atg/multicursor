@@ -12,7 +12,8 @@ struct range {
     
     bool isValid(); // Are location and length both non-negative?
     bool hasIndex(int64_t); // Does it contain this index?
-    
+    bool containsIndex(int64_t); // Does it contain this index?
+
     int64_t max(); // length + location
     int64_t lastIndex(); // max() - 1 unless the range is 0-length
     
@@ -44,12 +45,15 @@ public:
     int64_t indexForRange(range rng);
     
     // Returns the range at index 0, or the focused range if we are focused
-    range primaryRange();
+    int64_t primaryRangeIndex();
+	range primaryRange();
     
+    
+    void decohere();
     
 // Atomic operations
 // Guaranteed not to leave the context in an invalid state.
-    bool addRange(int64_t rng);
+    bool addRange(range rng);
     bool deleteRange(range rng);
     bool deleteRanges(std::vector<range> rngs);
     
