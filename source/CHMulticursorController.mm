@@ -17,6 +17,19 @@ static inline NSRangeToRange(NSRange rng) {
 - (NSLayoutManager *)layoutManager {
 	return [view layoutManager];
 }
+- (void)textViewSelectedRangeDidChange {
+	
+	// Reconcile this range with the multicursor controller's
+	// The primary range must not be changed!
+	
+	if (disableSelectedRange > 0) {
+		// We don't want the range to change
+		return;
+	}
+	
+	mulctx.setPrimaryRangeAndReconcile([view selectedRange]);
+}
+
 // Perform a text view action (select word right, etc) multiple times in the mulctx
 - (BOOL)performTextViewActionInContext:(SEL)action argument:(id)argument {
 	
@@ -28,35 +41,25 @@ static inline NSRangeToRange(NSRange rng) {
 	
 	disableSelectedRange++;
 	
-	mulctx.performAction(^range (range rng, bool* shouldDelete) {
+	__block NSRange primaryRange = [view selectedRange];
+	
+	mulctx.performAction(true, ^range (bool isPrimary, range rng, bool* shouldDelete) {
 		
 		[view setSelectedRange:RangeToNSRange(rng)];
 		
 		[view performSelector:action withObject:argument];
+		
+		if (isPrimary)
+			primaryRange = [view selectedRange];
 		
 		range rng = NSRangeToRange([view selectedRange]);
 		
 		return rng;
 	});
 	
-	[view setSelectedRange:RangeToNSRange(mulctx.primaryRange())];
+	[view setSelectedRange:primaryRange];
 	
 	disableSelectedRange--;
-}
-- (void)setSelectedRange:(NSRange)sel {
-	
-	if (disableSelectedRange > 0) {
-		[view super_setSelectedRange:sel];
-	}
-	
-	multctx.setRangeAtIndex(multctx.primaryRangeIndex(), RangeFromNSRange(sel));
-}
-- (NSRange)selectedRange {
-	
-	if (disableSelectedRange > 0)
-		return [view super_selectedRange];
-	
-	return RangeToNSRange(mulctx.primaryRange());
 }
 - (void)insertText:(NSString *)text {
 	
@@ -117,14 +120,14 @@ static inline NSRangeToRange(NSRange rng) {
 	
 	NSInteger clickPoint = [self rangeLocationForEvent:event];
 	
-	range rng = 
+	/* range rng = 
 	mulctx.performAction(^range (range rng, bool* shouldDelete) {
 		
 		
 		// Find the distance to this range
 		
 		return rng;
-	});
+	}); */
 
 	
 }

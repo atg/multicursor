@@ -61,7 +61,7 @@ public:
     bool unfocus();
     
     // Perform an action on multiple ranges
-    bool performAction(range (^callback)(range rng, bool* shouldDelete));
+    bool performAction(bool include_primary, range (^callback)(range rng, bool* shouldDelete));
 };
 
 } //namespace multicursor

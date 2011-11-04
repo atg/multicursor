@@ -144,6 +144,7 @@ void context::decohere() {
 	range primary = primaryRange();
 	ranges.erase(ranges.begin(), ranges.end());
 	ranges.push_back(primary);
+	focused_range_index = -1;
 }
 
 bool context::performAction(range (^callback)(range rng, bool* shouldDelete)) {
